@@ -1,11 +1,18 @@
 require 'faker'
 
+puts "Cleaning up database..."
+Faker::UniqueGenerator.clear
+
+Answer.delete_all
+Question.delete_all
 Quiz.delete_all
 User.delete_all
 
-users = []
-5.times do
-  users << User.create!(
+puts "Done!"
+
+puts "\nSeeding database..."
+users = 5.times.map do
+  User.create!(
     name: Faker::Name.name,
     email: Faker::Internet.unique.email,
     password: "password",
@@ -13,24 +20,45 @@ users = []
   )
 end
 
-20.times do |i|
+20.times do
   owner = users.sample
   possible_guests = users.reject { |u| u == owner }
-  guest = [possible_guests.sample, nil].sample
+  guest = possible_guests.sample
 
-  Quiz.create!(
-    title: Faker::Lorem.sentence(word_count: 3),
-    description: Faker::Lorem.paragraph(sentence_count: 10),
-    owner: owner,
-    guest: guest
-  )
+  Quiz.transaction do
+    quiz = Quiz.create!(
+      title: Faker::Lorem.sentence(word_count: 10),
+      description: Faker::Lorem.paragraph(sentence_count: 10),
+      owner: owner,
+      guest: guest
+    )
+
+    rand(3..5).times do
+      question_type = [:multiple_choice, :written_response].sample
+
+      question = quiz.questions.create!(
+        text: Faker::Lorem.question,
+        question_type: Question.question_types[question_type]
+      )
+
+      if question.multiple_choice?
+        answer_count = rand(3..5)
+        correct_answer_index = rand(0...answer_count)
+
+        answer_count.times do |index|
+          question.answers.create!(
+            text: Faker::Lorem.word.capitalize,
+            correct_answer: index == correct_answer_index
+          )
+        end
+      elsif question.written_response?
+        question.answers.create!(
+          text: Faker::Lorem.sentence(word_count: 4),
+          correct_answer: true
+        )
+      end
+    end
+  end
 end
 
-puts "Created #{users.count} users:"
-users.each { |u| puts "#{u.id} - #{u.name} (#{u.email})" }
-
-puts "\nCreated #{Quiz.count} quizzes:"
-Quiz.all.each do |quiz|
-  guest_name = quiz.guest ? quiz.guest.name : "No guest"
-  puts "Quiz #{quiz.id}: #{quiz.title}, Owner: #{quiz.owner.name}, Guest: #{guest_name}"
-end
+puts "Done!"
