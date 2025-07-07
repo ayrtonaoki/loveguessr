@@ -98,6 +98,11 @@ GEM
     diff-lcs (1.6.2)
     drb (2.2.1)
     erubi (1.13.1)
+    factory_bot (6.5.4)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.5.0)
+      factory_bot (~> 6.5)
+      railties (>= 6.1.0)
     faker (3.5.2)
       i18n (>= 1.8.11, < 2)
     globalid (1.2.1)
@@ -296,6 +301,7 @@ DEPENDENCIES
   brakeman
   debug
   devise
+  factory_bot_rails
   faker
   pg (~> 1.1)
   puma (>= 5.0)
