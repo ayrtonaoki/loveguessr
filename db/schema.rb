@@ -37,8 +37,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_06_193317) do
 
   create_table "questions", force: :cascade do |t|
     t.bigint "quiz_id", null: false
-    t.string "text"
-    t.integer "question_type"
+    t.string "text", null: false
+    t.integer "question_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["quiz_id"], name: "index_questions_on_quiz_id"
