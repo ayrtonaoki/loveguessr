@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :answer do
+    text { Faker::Lorem.sentence(word_count: 2) }
+    correct_answer { [true, false].sample }
     association :question
-    text { Faker::Lorem.sentence(word_count: 8) }
-    correct_answer { false }
   end
 end
