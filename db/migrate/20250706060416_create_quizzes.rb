@@ -1,8 +1,8 @@
 class CreateQuizzes < ActiveRecord::Migration[7.2]
   def change
     create_table :quizzes do |t|
-      t.string :title
-      t.text :description
+      t.string :title, null: false
+      t.text :description, null: false
       t.integer :owner_id
       t.integer :guest_id
 

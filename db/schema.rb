@@ -45,8 +45,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_06_193317) do
   end
 
   create_table "quizzes", force: :cascade do |t|
-    t.string "title"
-    t.text "description"
+    t.string "title", null: false
+    t.text "description", null: false
     t.integer "owner_id"
     t.integer "guest_id"
     t.datetime "created_at", null: false
