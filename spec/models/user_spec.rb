@@ -14,7 +14,7 @@ RSpec.describe User, type: :model do
       it { should allow_value('user@example.com').for(:email) }
       it { should_not allow_value('userexample.com').for(:email) }
 
-      it 'create valid User' do
+      it 'creates a valid User' do
         user = create(:user)
 
         expect(user).to be_valid
