@@ -1,6 +1,5 @@
 class Users::SessionsController < Devise::SessionsController
   respond_to :json
-  skip_before_action :verify_authenticity_token
 
   # Disable flash messages in API mode
   def set_flash_message!(key, _opts = {})
@@ -9,7 +8,12 @@ class Users::SessionsController < Devise::SessionsController
 
   # Custom JSON response on login
   def respond_with(resource, _opts = {})
-    render json: { message: 'Signed in successfully.', user: resource }, status: :ok
+    token = request.env['warden-jwt_auth.token'] # Get token from warden
+    render json: {
+      message: 'Signed in successfully.',
+      user: resource,
+      token: token
+    }, status: :ok
   end
 
   # Custom response on logout
