@@ -1,6 +1,5 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
-  skip_before_action :verify_authenticity_token
 
   # Disable flash messages (flash is not available in API mode)
   def set_flash_message!(key, _opts = {})
